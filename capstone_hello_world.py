@@ -18,8 +18,8 @@ def wrap_html(message):
     return html
 
 @app.route('/')
-def hello_world():
-    message = 'Hello DockerCon 2018!'
+def capstone_hello_world():
+    message = 'Hello Friends! My name is Maria Jose Gomez Mora presenting my Udacity Cloud DevOps Engineer Nanodegree - Capstone project!'
     html = wrap_html(message)
     return html
 

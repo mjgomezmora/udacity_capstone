@@ -87,4 +87,5 @@ jobs:
 workflows:
   prepare-app-workflow:
     jobs:
+      - lint-docker
       - build-python-app

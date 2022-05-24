@@ -1,7 +1,7 @@
-import hello_world
+import capstone_hello_world
 import unittest
 
-class TestHelloWorld(unittest.TestCase):
+class TestCapstoneHelloWorld(unittest.TestCase):
 
     def setUp(self):
         self.app = hello_world.app.test_client()
@@ -13,7 +13,7 @@ class TestHelloWorld(unittest.TestCase):
     
     def test_message(self):
         response = self.app.get('/')
-        message = hello_world.wrap_html('Hello DockerCon 2018!')
+        message = capstone_hello_world.wrap_html('Hello Friends! My name is Maria Jose Gomez Mora presenting my Udacity Cloud DevOps Engineer Nanodegree - Capstone project!')
         self.assertEqual(response.data, message)
 
 if __name__ == '__main__':
