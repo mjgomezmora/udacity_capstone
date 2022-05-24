@@ -59,16 +59,14 @@ jobs:
           resource-file-path: deployment.yaml
           resource-name: deployment/capstone-deployment
 workflows:
-  prepare-app-workflow:
+  capstone-workflow:
     jobs:
       - lint-docker
       - build-python-app:
           requires: [lint-docker]
-  deployment-eks-cluster:
-    requires: [prepare-app-workflow]
-    jobs:
       - aws-eks/create-cluster:
           cluster-name: eks-capstone-deployment
+          requires: [build-python-app]
       - create-deployment:
           cluster-name: eks-capstone-deployment
           requires:
