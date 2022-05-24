@@ -68,11 +68,6 @@ jobs:
             virtualenv capostoneenv
             . capostoneenv/bin/activate
             pip install --no-cache-dir -r requirements.txt
-      - run:
-          name: Run tests
-          command: |
-            . capostoneenv/bin/activate
-            python test_capstone_hello_world.py
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
