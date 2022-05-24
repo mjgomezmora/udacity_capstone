@@ -38,7 +38,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Build and push Docker image
+          name: Build Docker image
           command: |
             . capostoneenv/bin/activate
             docker build -t mjgmora/$IMAGE_NAME:$TAG .
@@ -53,6 +53,9 @@ jobs:
       - checkout            
       - setup_remote_docker:
           docker_layer_caching: true
+      - run:
+          name: Push Docker image
+          command: |
             . capostoneenv/bin/activate
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push mjgmora/$IMAGE_NAME:$TAG
