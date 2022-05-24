@@ -19,9 +19,7 @@ jobs:
           name: "Lint html"
           command: |
             sudo npm i -g html-validate 
-            html-validate "index.html" > output.txt
-            echo "HTML validation output: \n"
-            cat output.txt
+            html-validate "index.html" 
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
