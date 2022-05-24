@@ -46,15 +46,15 @@ jobs:
           command: |
             curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             sudo mv /tmp/eksctl /usr/local/bin      
-      - run:
-          name: Create eks cluster in aws using Cloudformation and Ansible
-          command: |
-      - run:
-          name: Create deployment in eks
-          command: |
-      - run:
-          name: Delete eks cluster
-          command: |
+#      - run:
+#          name: Create eks cluster in aws using Cloudformation and Ansible
+#          command: |
+#      - run:
+#          name: Create deployment in eks
+#          command: |
+#      - run:
+#          name: Delete eks cluster
+#          command: |
 workflows:
   capstone-workflow:
     jobs:
