@@ -19,7 +19,7 @@ jobs:
           name: "Lint html"
           command: |
             sudo npm i -g html-validate 
-            html-validate "../index.html" >> output.txt
+            html-validate "index.html" >> output.txt
             cat output.txt
 
 # Invoke jobs via workflows
