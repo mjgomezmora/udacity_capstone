@@ -41,6 +41,10 @@ jobs:
             docker build -t mjgmora/$IMAGE_NAME:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push mjgmora/$IMAGE_NAME:$TAG
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
       - run: yum install -y tar gzip
       - run:
           name: Install eks dependencies
@@ -62,3 +66,4 @@ workflows:
       - lint-docker
       - build-python-app:
           requires: [lint-docker]
+      - deploy-infrastructure
