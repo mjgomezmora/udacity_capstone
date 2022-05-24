@@ -17,6 +17,7 @@ jobs:
       - run:
           name: "Lint html"
           command: |
+            npm install
             npm i -g html-validate
             html-validate "../index.html"
 
