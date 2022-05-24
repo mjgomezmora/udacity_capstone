@@ -1,17 +1,6 @@
 version: 2.1
 
 jobs:
-  lint-html:
-    docker:
-      - image: cimg/node:16.0.0
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - run:
-          name: "Lint html"
-          command: |
-            sudo npm i -g html-validate 
-            html-validate "index.html" 
   lint-docker:
     docker:
       - image: cimg/node:16.0.0
@@ -19,40 +8,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Lint Dockerfile"
+          name: Lint Dockerfile
           command: |
             wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x ./hadolint
             ./hadolint Dockerfile
-  build-nginx:
-    docker:
-      - image: nginx
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - run: echo $PATH
-      - run: nginx
-      - run: nginx -v
-  build-docker-image:
-    docker:
-      - image: cimg/node:16.0.0
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - run:
-          name: "Build docker image using script"
-          command: |
-            sh ./run_docker.sh
-  upload-docker-image:
-    docker:
-      - image: cimg/node:16.0.0
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - run:
-          name: "Upload docker image using script"
-          command: |
-            sh ./upload_docker.sh            
   build-python-app:
     docker:
       - image: circleci/python:3.7.3-stretch
@@ -64,7 +24,7 @@ jobs:
           name: Setup the virtual environment
           command: |
             echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
-            echo 'export IMAGE_NAME=python-circleci-docker' >> $BASH_ENV 
+            echo 'export IMAGE_NAME=capstone_image' >> $BASH_ENV 
             virtualenv capostoneenv
             . capostoneenv/bin/activate
             pip install --no-cache-dir -r requirements.txt
@@ -82,4 +42,5 @@ workflows:
   prepare-app-workflow:
     jobs:
       - lint-docker
-      - build-python-app
+      - build-python-app:
+          requires: [lint-docker]
