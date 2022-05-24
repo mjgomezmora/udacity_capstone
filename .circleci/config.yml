@@ -41,6 +41,7 @@ jobs:
             docker build -t mjgmora/$IMAGE_NAME:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push mjgmora/$IMAGE_NAME:$TAG
+      - run: yum install -y tar gzip
       - run:
           name: Install eks dependencies
           command: |
