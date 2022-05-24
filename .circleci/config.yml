@@ -65,6 +65,7 @@ workflows:
       - build-python-app:
           requires: [lint-docker]
   deployment-eks-cluster:
+    requires: [prepare-app-workflow]
     jobs:
       - aws-eks/create-cluster:
           cluster-name: eks-capstone-deployment
