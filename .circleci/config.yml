@@ -13,7 +13,7 @@ jobs:
             wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x ./hadolint
             ./hadolint Dockerfile
-  setup-python-environment:
+  build-python-app:
     docker:
       - image: circleci/python:3.7.3-stretch
         environment:
@@ -28,44 +28,19 @@ jobs:
             virtualenv capostoneenv
             . capostoneenv/bin/activate
             pip install --no-cache-dir -r requirements.txt
-  build-docker-image:
-    docker:
-      - image: circleci/python:3.7.3-stretch
-        environment:
-          FLASK_CONFIG: testing
-    steps:
-      - checkout            
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Build Docker image
+          name: Build and push Docker image
           command: |
-            virtualenv capostoneenv
             . capostoneenv/bin/activate
             docker build -t mjgmora/$IMAGE_NAME:$TAG .
-  upload-docker-image:
-    docker:
-      - image: circleci/python:3.7.3-stretch
-        environment:
-          FLASK_CONFIG: testing
-    steps:
-      - checkout            
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Push Docker image
-          command: |
-            . capostoneenv/bin/activate
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push mjgmora/$IMAGE_NAME:$TAG
-            
+
 workflows:
   prepare-app-workflow:
     jobs:
       - lint-docker
-      - setup-python-environment:
+      - build-python-app:
           requires: [lint-docker]
-      - build-docker-image:
-          requires: [setup-python-environment]      
-      - upload-docker-image:
-          requires: [build-docker-image]         
