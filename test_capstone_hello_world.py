@@ -4,7 +4,7 @@ import unittest
 class TestCapstoneHelloWorld(unittest.TestCase):
 
     def setUp(self):
-        self.app = hello_world.app.test_client()
+        self.app = capstone_hello_world.app.test_client()
         self.app.testing = True
 
     def test_status_code(self):
