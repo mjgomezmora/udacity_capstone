@@ -1,12 +1,11 @@
-FROM nginx:stable
+FROM python:2.7.14
 
-## Step 1:
-# Copy source code to working directory
-COPY . index.html /usr/share/nginx/html/
+RUN mkdir /opt/hello_word/
+WORKDIR /opt/hello_word/
 
-## Step 2:
-RUN apt-get update  && apt-get -y --no-install-recommends install nginx=stable  && apt-get clean && rm -rf /var/lib/apt/lists/*
+COPY requirements.txt .
+COPY dist/hello_world /opt/hello_word/
 
-## Step 3:
-# Expose port 80
 EXPOSE 80
+
+CMD [ "./hello_world" ]
