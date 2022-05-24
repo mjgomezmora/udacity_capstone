@@ -41,48 +41,23 @@ jobs:
             docker build -t mjgmora/$IMAGE_NAME:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push mjgmora/$IMAGE_NAME:$TAG
-  create-deployment:
-    docker:
-      - image: 'cimg/python:3.10'
-    parameters:
-      cluster-name:
-        description: |
-          Name of the EKS cluster
-        type: string
-    steps:
-      - checkout
-      - aws-eks/update-kubeconfig-with-authenticator:
-          cluster-name: << parameters.cluster-name >>
-          install-kubectl: true
-      - kubernetes/create-or-update-resource:
-          get-rollout-status: true
-          resource-file-path: deployment.yaml
-          resource-name: deployment/capstone-deployment
+      - run:
+          name: Install eks dependencies
+          command: |
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin      
+      - run:
+          name: Create eks cluster in aws using Cloudformation and Ansible
+          command: |
+      - run:
+          name: Create deployment in eks
+          command: |
+      - run:
+          name: Delete eks cluster
+          command: |
 workflows:
   capstone-workflow:
     jobs:
       - lint-docker
       - build-python-app:
           requires: [lint-docker]
-      - aws-eks/create-cluster:
-          cluster-name: eks-capstone-deployment
-          requires: [build-python-app]
-      - create-deployment:
-          cluster-name: eks-capstone-deployment
-          requires:
-            - aws-eks/create-cluster
-      - aws-eks/update-container-image:
-          cluster-name: eks-capstone-deployment
-          container-image-updates: 'mjgmora=capstone_image:0.1.71'
-          post-steps:
-            - kubernetes/delete-resource:
-                resource-names: capstone-deployment
-                resource-types: deployment
-                wait: true
-          requires:
-            - create-deployment
-          resource-name: deployment/capstone-deployment
-      - aws-eks/delete-cluster:
-          cluster-name: eks-capstone-deployment
-          requires:
-            - aws-eks/update-container-image
