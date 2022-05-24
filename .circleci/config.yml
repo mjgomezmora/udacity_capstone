@@ -16,8 +16,7 @@ jobs:
       - checkout
       - run:
           name: "Lint html"
-          command: |
-            npm i -g html-validate
+          command: 
             html-validate "../index.html"
 
 # Invoke jobs via workflows
