@@ -12,7 +12,7 @@ jobs:
           command: |
             sudo npm i -g html-validate 
             html-validate "index.html" 
-  build-docker:
+  build-nginx:
     docker:
       - image: nginx
     working_directory: ~/repo
@@ -26,5 +26,5 @@ workflows:
   prepare-app-workflow:
     jobs:
       - lint-html
-      - build-docker:
+      - build-nginx:
           requires: [lint-html]
