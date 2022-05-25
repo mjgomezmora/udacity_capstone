@@ -62,29 +62,29 @@ jobs:
             echo "eksctl tools installed corretly with version: "
             cat eksctl_output.txt
       - run:
-        name: Create eks blue cluster
-        command: |
+          name: Create eks blue cluster
+          command: |
             eksctl create cluster --name my-capstone-blue-cluster --region us-east-1
       - run:
-        name: Create eks green cluster
-        command: |
+          name: Create eks green cluster
+          command: |
             eksctl create cluster --name my-capstone-green-cluster --region us-east-1
       - run:
-        name: Display nodes and pods installed
-        command: |
+          name: Display nodes and pods installed
+          command: |
             kubectl get nodes -o wide
             kubectl get pods -A -o wide
 #      - run:
 #          name: Create deployment in eks
 #          command: |
       - run:
-        name: Delete eks clusters
-        command: |
+          name: Delete eks clusters
+          command: |
             eksctl delete cluster --name my-capstone-blue-cluster --region us-east-1
             eksctl delete cluster --name my-capstone-green-cluster --region us-east-1
-      - run:
-        name: Display nodes and pods deleted
-        command: |
+    - run:
+          name: Display nodes and pods deleted
+          command: |
             kubectl get nodes -o wide
             kubectl get pods -A -o wide
 workflows:
