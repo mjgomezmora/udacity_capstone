@@ -65,7 +65,8 @@ jobs:
           name: Install the kubectl tool
           command: |
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"          
-            echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+            echo "kubectl installed correctly version:"
+            kubectl version
 #      - run:
 #          name: Create eks blue cluster
 #          command: |
