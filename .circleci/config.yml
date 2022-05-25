@@ -66,4 +66,5 @@ workflows:
       - lint-docker
       - build-python-app:
           requires: [lint-docker]
-      - deploy-infrastructure
+      - deploy-infrastructure:
+          requires: [build-python-app]
