@@ -73,6 +73,8 @@ jobs:
           resource-file-path: service.json
           resource-name: service/bluegreenlb
   create-small-cluster:
+    docker:
+      - image: amazon/aws-cli
     executor: aws-eks/python3
     parameters:
       cluster-name:
@@ -83,6 +85,7 @@ jobs:
       - checkout
       - aws-eks/install-aws-iam-authenticator:
           release-tag: ''
+      - run: yum install -y tar gzip
       - run:
           name: Install eksctl tool
           command: |
