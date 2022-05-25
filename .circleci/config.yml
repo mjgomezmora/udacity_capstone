@@ -83,6 +83,7 @@ jobs:
       - checkout
       - aws-eks/install-aws-iam-authenticator:
           release-tag: ''
+      - run: yum install -y tar gzip
       - aws-eks/create-cluster:
           cluster-name: << parameters.cluster-name >>
           skip-kubectl-install: false
@@ -93,7 +94,7 @@ jobs:
           ssh-public-key: ''
 
 workflows:
-  deployment:
+  capstone-wokflow:
     jobs:
       - lint-docker
       - build-python-app:
