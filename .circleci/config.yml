@@ -82,7 +82,7 @@ jobs:
           command: |
             eksctl delete cluster --name my-capstone-blue-cluster --region us-east-1
             eksctl delete cluster --name my-capstone-green-cluster --region us-east-1
-    - run:
+      - run:
           name: Display nodes and pods deleted
           command: |
             kubectl get nodes -o wide
