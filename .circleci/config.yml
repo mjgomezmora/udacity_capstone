@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  aws-eks: circleci/aws-eks@2.0.0
+  aws-eks: circleci/aws-eks@1.1.0
   kubernetes: circleci/kubernetes@0.4.0
 
 jobs:
@@ -72,7 +72,9 @@ jobs:
       - kubernetes/create-or-update-resource:
           resource-file-path: service.json
           resource-name: service/bluegreenlb
-  create-small-cluster:
+  create-cluster:
+    docker:
+      - image: amazon/aws-cli
     executor: aws-eks/python3
     parameters:
       cluster-name:
@@ -98,7 +100,7 @@ workflows:
       - lint-docker
       - build-python-app:
           requires: [lint-docker]
-      - create-small-cluster:
+      - create-cluster:
           cluster-name: eks-demo-deployment
           requires: [build-python-app]
       - create-service:
