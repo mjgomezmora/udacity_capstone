@@ -87,7 +87,7 @@ jobs:
           release-tag: ''
       - run: yum install -y tar gzip
       - run:
-          name: Install the eksctl tool
+          name: Install eksctl tool
           command: |
             mkdir -p eksctl_download
             curl --silent --location --retry 5 "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" \
