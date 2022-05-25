@@ -65,10 +65,10 @@ jobs:
           name: Create eks blue cluster
           command: |
             eksctl create cluster --name my-capstone-blue --region us-east-1
-      - run:
-          name: Create eks green cluster
-          command: |
-            eksctl create cluster --name my-capstone-green --region us-east-1
+#      - run:
+#          name: Create eks green cluster
+#          command: |
+#            eksctl create cluster --name my-capstone-green --region us-east-1
       - run:
           name: Display nodes and pods installed
           command: |
@@ -81,12 +81,12 @@ jobs:
           name: Delete eks clusters
           command: |
             eksctl delete cluster --name my-capstone-blue --region us-east-1
-            eksctl delete cluster --name my-capstone-green --region us-east-1
+#            eksctl delete cluster --name my-capstone-green --region us-east-1
       - run:
           name: Display nodes and pods deleted
           command: |
             kubectl get nodes -o wide
-            kubectl get pods -A -o wide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
+            kubectl get pods -A -o wide
 workflows:
   capstone-workflow:
     jobs:
