@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  aws-eks: circleci/aws-eks@1.1.0
+  aws-eks: circleci/aws-eks@2.0.0
   kubernetes: circleci/kubernetes@0.4.0
 
 jobs:
@@ -73,8 +73,6 @@ jobs:
           resource-file-path: service.json
           resource-name: service/bluegreenlb
   create-small-cluster:
-    docker:
-      - image: amazon/aws-cli
     executor: aws-eks/python3
     parameters:
       cluster-name:
@@ -85,22 +83,6 @@ jobs:
       - checkout
       - aws-eks/install-aws-iam-authenticator:
           release-tag: ''
-      - run: yum install -y tar gzip
-      - run:
-          name: Install eksctl tool
-          command: |
-            mkdir -p eksctl_download
-            curl --silent --location --retry 5 "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" \
-              | tar xz -C eksctl_download
-            chmod +x eksctl_download/eksctl
-            SUDO=""
-            if [ $(id -u) -ne 0 ] && which sudo > /dev/null ; then
-              SUDO="sudo"
-            fi
-            $SUDO mv eksctl_download/eksctl /usr/local/bin/
-            rmdir eksctl_download   
-            echo "eksctl tool installed correctly, version: "
-            eksctl version
       - aws-eks/create-cluster:
           cluster-name: << parameters.cluster-name >>
           skip-kubectl-install: false
