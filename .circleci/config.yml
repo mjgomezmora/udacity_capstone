@@ -59,17 +59,34 @@ jobs:
             $SUDO mv eksctl_download/eksctl /usr/local/bin/
             rmdir eksctl_download     
             eksctl version >> eksctl_output.txt
-            echo "eksctl version: "
+            echo "eksctl tools installed corretly with version: "
             cat eksctl_output.txt
-#      - run:
-#          name: Create eks cluster in aws using Cloudformation and Ansible
-#          command: |
+      - run:
+        name: Create eks blue cluster
+        command: |
+            eksctl create cluster --name my-capstone-blue-cluster --region us-east-1
+      - run:
+        name: Create eks green cluster
+        command: |
+            eksctl create cluster --name my-capstone-green-cluster --region us-east-1
+      - run:
+        name: Display nodes and pods installed
+        command: |
+            kubectl get nodes -o wide
+            kubectl get pods -A -o wide
 #      - run:
 #          name: Create deployment in eks
 #          command: |
-#      - run:
-#          name: Delete eks cluster
-#          command: |
+      - run:
+        name: Delete eks clusters
+        command: |
+            eksctl delete cluster --name my-capstone-blue-cluster --region us-east-1
+            eksctl delete cluster --name my-capstone-green-cluster --region us-east-1
+      - run:
+        name: Display nodes and pods deleted
+        command: |
+            kubectl get nodes -o wide
+            kubectl get pods -A -o wide
 workflows:
   capstone-workflow:
     jobs:
