@@ -62,6 +62,11 @@ jobs:
             echo "eksctl tools installed corretly with version: "
             cat eksctl_output.txt
       - run:
+          name: Install the kubectl tool
+          command: |
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"          
+            echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+      - run:
           name: Create eks blue cluster
           command: |
             eksctl create cluster --name my-capstone-blue --region us-east-1
