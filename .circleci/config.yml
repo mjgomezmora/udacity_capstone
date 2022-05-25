@@ -106,7 +106,7 @@ workflows:
       - create-service:
           cluster-name: eks-demo-deployment
           requires:
-            - create-small-cluster
+            - create-cluster
       - create-deployment:
           cluster-name: eks-demo-deployment
           requires:
