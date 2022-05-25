@@ -57,7 +57,10 @@ jobs:
               SUDO="sudo"
             fi
             $SUDO mv eksctl_download/eksctl /usr/local/bin/
-            rmdir eksctl_download            
+            rmdir eksctl_download     
+            eksctl version >> eksctl_output.txt
+            echo "eksctl version: "
+            cat eksctl_output.txt
 #      - run:
 #          name: Create eks cluster in aws using Cloudformation and Ansible
 #          command: |
