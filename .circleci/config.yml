@@ -62,8 +62,9 @@ jobs:
 #          nodes-max: 2
 #          ssh-access: false
 #          ssh-public-key: ''
-
   create-service:
+    docker:
+      - image: 'cimg/python:3.10'
     executor: aws-eks/python3
     parameters:
       cluster-name:
