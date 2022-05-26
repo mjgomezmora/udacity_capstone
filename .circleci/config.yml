@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  aws-eks: circleci/aws-eks@2.2.0
+  aws-eks: circleci/aws-eks@1.1.0
   kubernetes: circleci/kubernetes@0.4.0
 
 jobs:
@@ -63,8 +63,7 @@ jobs:
 #          ssh-access: false
 #          ssh-public-key: ''
   create-service:
-    docker:
-      - image: 'cimg/python:3.10'
+    executor: aws-eks/python3
     parameters:
       cluster-name:
         description: |
@@ -79,8 +78,7 @@ jobs:
           resource-file-path: service.json
           resource-name: service/bluegreenlb
   create-deployment:
-    docker:
-      - image: 'cimg/python:3.10'
+    executor: aws-eks/python3
     parameters:
       cluster-name:
         description: |
