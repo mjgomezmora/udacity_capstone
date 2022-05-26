@@ -125,7 +125,7 @@ workflows:
       - test-cluster:
           cluster-name: eks-demo-deployment
           requires:
-          - aws-eks/create-cluster:
+          - aws-eks/create-cluster
       - create-service:
           cluster-name: eks-demo-deployment
           requires:
