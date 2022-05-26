@@ -44,6 +44,7 @@ jobs:
 #  create-cluster:
 #    docker:
 #      - image: amazon/aws-cli
+#    executor: aws-eks/python3
 #    parameters:
 #      cluster-name:
 #        description: |
@@ -62,8 +63,7 @@ jobs:
 #          ssh-access: false
 #          ssh-public-key: ''
   create-service:
-    docker:
-      - image: 'cimg/python:3.10'
+    executor: aws-eks/python3
     parameters:
       cluster-name:
         description: |
@@ -78,8 +78,7 @@ jobs:
           resource-file-path: service.json
           resource-name: service/bluegreenlb
   create-deployment:
-    docker:
-      - image: 'cimg/python:3.10'
+    executor: aws-eks/python3
     parameters:
       cluster-name:
         description: |
@@ -120,14 +119,16 @@ workflows:
           requires: [lint-docker]
       - aws-eks/create-cluster:
           cluster-name: eks-demo-deployment
+          requires:
+            - [build-python-app]
       - test-cluster:
           cluster-name: eks-demo-deployment
           requires:
-            - aws-eks/create-cluster
+          - aws-eks/create-cluster:
       - create-service:
           cluster-name: eks-demo-deployment
           requires:
-            - aws-eks/create-cluster
+          - test-cluster:
       - create-deployment:
           cluster-name: eks-demo-deployment
           requires:
@@ -142,5 +143,5 @@ workflows:
       - aws-eks/delete-cluster:
           cluster-name: eks-demo-deployment
           requires:
-            - test-cluster      
+            - aws-eks/update-container-image     
           
