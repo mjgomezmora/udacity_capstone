@@ -24,7 +24,7 @@
             "containers":[
                {
                   "name":"blue",
-                  "image":"mjgmora/testblueimage",
+                  "image":"mjgmora/capstone_image:0.1.${CIRCLE_BUILD_NUM}",
                   "ports":[
                      {
                         "name":"http-server",
