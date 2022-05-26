@@ -110,7 +110,6 @@ jobs:
           command: |
             kubectl get services
           name: Test cluster          
-
 workflows:
   capstone-workflow:
     jobs:
@@ -129,7 +128,7 @@ workflows:
       - create-service:
           cluster-name: eks-demo-deployment
           requires:
-          - test-cluster:
+          - test-cluster
       - create-deployment:
           cluster-name: eks-demo-deployment
           requires:
