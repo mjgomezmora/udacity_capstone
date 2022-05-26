@@ -44,7 +44,6 @@ jobs:
 #  create-cluster:
 #    docker:
 #      - image: amazon/aws-cli
-#    executor: aws-eks/python3
 #    parameters:
 #      cluster-name:
 #        description: |
