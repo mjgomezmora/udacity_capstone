@@ -25,22 +25,27 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Setup the virtual environment
+          name: Setup the virtual environment and build Docker image
           command: |
-            echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
-            echo 'export IMAGE_NAME=capstone_image' >> $BASH_ENV 
             virtualenv capostoneenv
             . capostoneenv/bin/activate
             pip install --no-cache-dir -r requirements.txt
+            docker build -t mjgmora/capstone_image:0.1.${CIRCLE_BUILD_NUM} .
+  deploy-python-app:
+    docker:
+      - image: circleci/python:3.7.3-stretch
+        environment:
+          FLASK_CONFIG: testing
+    steps:
+      - checkout
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Build and push Docker image
+          name: Push Docker image
           command: |
             . capostoneenv/bin/activate
-            docker build -t mjgmora/$IMAGE_NAME:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push mjgmora/$IMAGE_NAME:$TAG
+            docker push mjgmora/capstone_image:0.1.${CIRCLE_BUILD_NUM}
 workflows:
   capstone-workflow:
     jobs:
@@ -48,4 +53,7 @@ workflows:
       - build-python-app:
           requires: 
             - lint-docker
+      - deploy-python-app:
+          requires: 
+            - build-python-app
           
