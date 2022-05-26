@@ -17,7 +17,7 @@ jobs:
             wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x ./hadolint
             ./hadolint Dockerfile
-  build-python-app:
+  build-deploy-app:
     docker:
       - image: circleci/python:3.7.3-stretch
         environment:
@@ -25,36 +25,28 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Setup the virtual environment and build Docker image
+          name: Setup the virtual environment
           command: |
+            echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
+            echo 'export IMAGE_NAME=capstone_image' >> $BASH_ENV 
             virtualenv capostoneenv
             . capostoneenv/bin/activate
             pip install --no-cache-dir -r requirements.txt
-            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker build -t mjgmora/capstone_image:0.1.${CIRCLE_BUILD_NUM} .
-  deploy-python-app:
-    docker:
-      - image: circleci/python:3.7.3-stretch
-        environment:
-          FLASK_CONFIG: testing
-    steps:
-      - checkout
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Push Docker image
+          name: Build and push Docker image
           command: |
             . capostoneenv/bin/activate
+            docker build -t mjgmora/$IMAGE_NAME:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push mjgmora/capstone_image:0.1.${CIRCLE_BUILD_NUM}
+            docker push mjgmora/$IMAGE_NAME:$TAG
+     
 workflows:
   capstone-workflow:
     jobs:
       - lint-docker
-      - build-python-app:
+      - build-deploy-app:
           requires: 
             - lint-docker
-      - deploy-python-app:
-          requires: 
-            - build-python-app
           
