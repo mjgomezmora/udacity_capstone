@@ -62,12 +62,13 @@ jobs:
 #          nodes-max: 2
 #          ssh-access: false
 #          ssh-public-key: ''
+
   create-service:
     executor: aws-eks/python3
     parameters:
       cluster-name:
         description: |
-          Name of the EKS cluster
+          Name of the AWS EKS cluster
         type: string
     steps:
       - checkout
@@ -112,14 +113,11 @@ jobs:
           name: Test cluster          
 
 workflows:
-  capstone-wokflow:
+  capstone-workflow:
     jobs:
       - lint-docker
       - build-python-app:
           requires: [lint-docker]
-workflows:
-  deployment:
-    jobs:
       - aws-eks/create-cluster:
           cluster-name: eks-demo-deployment
       - test-cluster:
