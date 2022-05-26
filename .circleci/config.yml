@@ -63,7 +63,8 @@ jobs:
 #          ssh-access: false
 #          ssh-public-key: ''
   create-service:
-    executor: aws-eks/python3
+    docker:
+      - image: 'cimg/python:3.10'
     parameters:
       cluster-name:
         description: |
@@ -78,7 +79,8 @@ jobs:
           resource-file-path: service.json
           resource-name: service/bluegreenlb
   create-deployment:
-    executor: aws-eks/python3
+    docker:
+      - image: 'cimg/python:3.10'
     parameters:
       cluster-name:
         description: |
