@@ -116,11 +116,12 @@ workflows:
     jobs:
       - lint-docker
       - build-python-app:
-          requires: [lint-docker]
+          requires: 
+            - lint-docker
       - aws-eks/create-cluster:
           cluster-name: eks-demo-deployment
           requires:
-            - [build-python-app]
+            - build-python-app
       - test-cluster:
           cluster-name: eks-demo-deployment
           requires:
