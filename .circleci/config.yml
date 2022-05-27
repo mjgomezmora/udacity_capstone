@@ -14,8 +14,9 @@ jobs:
           command: |
             kubectl get services && sleep 300
           name: Test cluster
+          
 orbs:
-  aws-eks: circleci/aws-eks@0.2.3
+  aws-eks: circleci/aws-eks@2.2.0
   kubernetes: circleci/kubernetes@0.4.0
 version: 2.1
 workflows:
