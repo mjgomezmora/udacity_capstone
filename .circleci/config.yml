@@ -35,12 +35,19 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Build and push Docker image
+          name: Build and push Docker image blue
           command: |
             . capostoneenv/bin/activate
-            docker build -t mjgmora/$IMAGE_NAME:$TAG .
+            docker build -t mjgmora/$IMAGE_NAME-blue:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push mjgmora/$IMAGE_NAME:$TAG
+            docker push mjgmora/$IMAGE_NAME-blue:$TAG
+      - run:
+          name: Build and push Docker image green
+          command: |
+            . capostoneenv/bin/activate
+            docker build -t mjgmora/$IMAGE_NAME-green:$TAG .
+            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+            docker push mjgmora/$IMAGE_NAME-green:$TAG
      
 workflows:
   capstone-workflow:
