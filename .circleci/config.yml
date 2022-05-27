@@ -1,70 +1,33 @@
-version: 2.1
-
-orbs:
-  aws-eks: circleci/aws-eks@1.1.0
-  kubernetes: circleci/kubernetes@0.4.0
-
 jobs:
-  lint-docker:
-    docker:
-      - image: cimg/node:16.0.0
-    working_directory: ~/repo
+  test-cluster:
+    executor: aws-eks/python3
+    parameters:
+      cluster-name:
+        description: |
+          Name of the EKS cluster
+        type: string
     steps:
-      - checkout
+      - kubernetes/install
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
       - run:
-          name: Lint Dockerfile
           command: |
-            wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
-            chmod +x ./hadolint
-            ./hadolint Dockerfile
-  build-deploy-app:
-    docker:
-      - image: circleci/python:3.7.3-stretch
-        environment:
-          FLASK_CONFIG: testing
-    steps:
-      - checkout
-      - run:
-          name: Setup the virtual environment
-          command: |
-            echo 'export IMAGE_NAME=capstone_image' >> $BASH_ENV 
-            virtualenv capostoneenv
-            . capostoneenv/bin/activate
-            pip install --no-cache-dir -r requirements.txt
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build and push blue Docker image
-          command: |
-            . capostoneenv/bin/activate
-            cd blue
-            docker build -t mjgmora/$IMAGE_NAME:capstone_image_blue .
-            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push mjgmora/$IMAGE_NAME:capstone_image_blue
-      - run:
-          name: Deploy blue docker image
-          command: |
-            cd blue
-            ./run_kubernetes.sh
-      - run:
-          name: Build and push green Docker image
-          command: |
-            . capostoneenv/bin/activate
-            cd green
-            docker build -t mjgmora/$IMAGE_NAME:capstone_image_green .
-            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push mjgmora/$IMAGE_NAME:capstone_image_green
-      - run:
-          name: Deploy green docker image
-          command: |
-            cd green
-            ./run_kubernetes.sh
-
+            kubectl get services && sleep 300
+          name: Test cluster
+orbs:
+  aws-eks: circleci/aws-eks@0.2.3
+  kubernetes: circleci/kubernetes@0.4.0
+version: 2.1
 workflows:
-  capstone-workflow:
+  deployment:
     jobs:
-      - lint-docker
-      - build-deploy-app:
-          requires: 
-            - lint-docker
-          
+      - aws-eks/create-cluster:
+          cluster-name: my-eks-demo
+      - test-cluster:
+          cluster-name: my-eks-demo
+          requires:
+            - aws-eks/create-cluster
+      - aws-eks/delete-cluster:
+          cluster-name: my-eks-demo
+          requires:
+            - test-cluster
