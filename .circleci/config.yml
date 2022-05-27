@@ -40,7 +40,7 @@ jobs:
             . capostoneenv/bin/activate
             docker build -t mjgmora/$IMAGE_NAME:$TAG-blue .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push mjgmora/$IMAGE_NAME:$TAG-green
+            docker push mjgmora/$IMAGE_NAME:$TAG-blue
       - run:
           name: Build and push Docker image green
           command: |
