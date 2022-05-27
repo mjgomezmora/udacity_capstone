@@ -19,7 +19,7 @@ def wrap_html(message):
 
 @app.route('/')
 def capstone_hello_world():
-    message = 'Hello Friends! My name is Maria Jose Gomez Mora presenting my Udacity Cloud DevOps Engineer Nanodegree - Capstone project!'
+    message = 'GREEN --------------->  Hello Friends! My name is Maria Jose Gomez Mora presenting my Udacity Cloud DevOps Engineer Nanodegree - Capstone project!'
     html = wrap_html(message)
     return html
 

@@ -27,7 +27,6 @@ jobs:
       - run:
           name: Setup the virtual environment
           command: |
-            echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
             echo 'export IMAGE_NAME=capstone_image' >> $BASH_ENV 
             virtualenv capostoneenv
             . capostoneenv/bin/activate
@@ -35,12 +34,31 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Build and push Docker image
+          name: Build and push blue Docker image
           command: |
             . capostoneenv/bin/activate
-            docker build -t mjgmora/$IMAGE_NAME:$TAG .
+            cd blue
+            docker build -t mjgmora/$IMAGE_NAME:capstone_image_blue .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push mjgmora/$IMAGE_NAME:$TAG
+            docker push mjgmora/$IMAGE_NAME:capstone_image_blue
+      - run:
+          name: Deploy blue docker image
+          command: |
+            cd blue
+            ./run_kubernetes.sh
+      - run:
+          name: Build and push green Docker image
+          command: |
+            . capostoneenv/bin/activate
+            cd green
+            docker build -t mjgmora/$IMAGE_NAME:capstone_image_green .
+            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+            docker push mjgmora/$IMAGE_NAME:capstone_image_green
+      - run:
+          name: Deploy green docker image
+          command: |
+            cd green
+            ./run_kubernetes.sh
 
 workflows:
   capstone-workflow:
