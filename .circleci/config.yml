@@ -49,7 +49,6 @@ jobs:
             # Connect to the aws eks cluster and then deploy the replication and service in there??
             cd green
             ./run_kubernetes.sh
-          
   delete-cluster:
     executor: aws-eks/python3
     parameters:
