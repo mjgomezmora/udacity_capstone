@@ -38,16 +38,16 @@ jobs:
           name: Build and push Docker image blue
           command: |
             . capostoneenv/bin/activate
-            docker build -t mjgmora/$IMAGE_NAME-blue:$TAG .
+            docker build -t mjgmora/$IMAGE_NAME:$TAG-blue .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push mjgmora/$IMAGE_NAME-blue:$TAG
+            docker push mjgmora/$IMAGE_NAME:$TAG-green
       - run:
           name: Build and push Docker image green
           command: |
             . capostoneenv/bin/activate
-            docker build -t mjgmora/$IMAGE_NAME-green:$TAG .
+            docker build -t mjgmora/$IMAGE_NAME:$TAG-green.
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push mjgmora/$IMAGE_NAME-green:$TAG
+            docker push mjgmora/$IMAGE_NAME:$TAG-green
      
 workflows:
   capstone-workflow:
