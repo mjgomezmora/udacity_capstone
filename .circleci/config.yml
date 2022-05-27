@@ -26,7 +26,8 @@ jobs:
             fi
             $SUDO mv eksctl_download/eksctl /usr/local/bin/
             rmdir eksctl_download
-      
+      - aws-eks/create-cluster:
+          cluster-name: << parameters.cluster-name >>     
   test-cluster:
     executor: aws-eks/python3
     parameters:
