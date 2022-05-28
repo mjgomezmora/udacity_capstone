@@ -2,6 +2,8 @@ jobs:
   lint-docker:
     docker:
       - image: circleci/python:3.7.3-stretch
+        environment:
+          FLASK_CONFIG: testing
     working_directory: ~/repo
     steps:
       - checkout
