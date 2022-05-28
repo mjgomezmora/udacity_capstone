@@ -6,7 +6,7 @@ def wrap_html(message):
     html = """
         <html>
         <body>
-            <div style='font-size:120px;'>
+            <div style='font-size:20px;'>
             <center>
                 <image height="200" width="800" src="https://infosiftr.com/wp-content/uploads/2018/01/unnamed-2.png">
                 <br>
