@@ -5,10 +5,10 @@ app = Flask(__name__)
 def wrap_html(message):
     html = """
         <html>
-        <body>
+        <body style="background: green;">
             <div style='font-size:20px;'>
             <center>
-                <image height="200" width="800" src="https://infosiftr.com/wp-content/uploads/2018/01/unnamed-2.png">
+                <image height="200" width="800" src="cloud.png">
                 <br>
                 {0}<br>
             </center>
@@ -19,7 +19,7 @@ def wrap_html(message):
 
 @app.route('/')
 def capstone_hello_world():
-    message = 'GREEN --------------->  Hello Friends! My name is Maria Jose Gomez Mora presenting my Udacity Cloud DevOps Engineer Nanodegree - Capstone project!'
+    message = 'Hello Friends! My name is Maria Jose Gomez Mora presenting my Udacity Cloud DevOps Engineer Nanodegree - Capstone project!'
     html = wrap_html(message)
     return html
 

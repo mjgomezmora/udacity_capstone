@@ -1,24 +1,24 @@
 jobs:
   lint-docker:
     docker:
-      - image: circleci/python:3.7.3-stretch
-        environment:
-          FLASK_CONFIG: testing
+      - image: cimg/node:16.0.0
     working_directory: ~/repo
     steps:
       - checkout
       - run:
-          name: Lint Dockerfile for app
+          name: Lint Dockerfile for blue app
           command: |
+            cd blue
             wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x ./hadolint
             ./hadolint Dockerfile
       - run:
-          name: Run app test
+          name: Lint Dockerfile for green app
           command: |
-            virtualenv capostoneenv
-            . capostoneenv/bin/activate
-            python test_capstone_hello_world.py            
+            cd green
+            wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+            chmod +x ./hadolint
+            ./hadolint Dockerfile
   build-deploy-app:
     docker:
       - image: circleci/python:3.7.3-stretch
@@ -98,7 +98,6 @@ jobs:
       - run:
           command: |
             sleep 300 && kubectl get all
-            # curl the url ?? how to get the url?
           name: Test blue app in cluster
       - run:
           name: Deploy green app in cluster
@@ -108,7 +107,6 @@ jobs:
       - run:
           command: |
             sleep 300 && kubectl get all
-            # curl the url ?? how to get the url?
           name: Test green app in cluster
   delete-cluster:
     executor: aws-eks/python3
@@ -150,18 +148,18 @@ workflows:
       - build-deploy-app:
           requires: 
             - lint-docker    
-#      - create-cluster:
-#          cluster-name: my-eks-demo
-#          requires: 
-#            - build-deploy-app          
-#      - test-cluster:
-#          cluster-name: my-eks-demo
-#          requires:
-#            - create-cluster
-#      - delete-cluster:
-#          cluster-name: my-eks-demo
-#          requires:
-#            - test-cluster
+      - create-cluster:
+          cluster-name: my-eks-demo
+          requires: 
+            - build-deploy-app          
+      - test-cluster:
+          cluster-name: my-eks-demo
+          requires:
+            - create-cluster
+      - delete-cluster:
+          cluster-name: my-eks-demo
+          requires:
+            - test-cluster
             
             
             
