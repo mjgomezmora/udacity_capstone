@@ -1,4 +1,56 @@
 jobs:
+  lint-docker:
+    docker:
+      - image: cimg/node:16.0.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Lint Dockerfile for blue app
+          command: |
+            wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+            chmod +x ./hadolint
+            cd blue
+            ./hadolint Dockerfile
+      - run:
+          name: Lint Dockerfile for green app
+          command: |
+            wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+            chmod +x ./hadolint
+            cd green
+            ./hadolint Dockerfile
+  build-deploy-app:
+    docker:
+      - image: circleci/python:3.7.3-stretch
+        environment:
+          FLASK_CONFIG: testing
+    steps:
+      - checkout
+      - run:
+          name: Setup python virtual environment
+          command: |
+            echo 'export IMAGE_NAME=capstone_image' >> $BASH_ENV 
+            virtualenv capostoneenv
+            . capostoneenv/bin/activate
+            pip install --no-cache-dir -r requirements.txt
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build and push blue Docker image
+          command: |
+            . capostoneenv/bin/activate
+            cd blue
+            docker build -t mjgmora/$IMAGE_NAME:capstone_image_blue .
+            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+            docker push mjgmora/$IMAGE_NAME:capstone_image_blue
+      - run:
+          name: Build and push green Docker image
+          command: |
+            . capostoneenv/bin/activate
+            cd green
+            docker build -t mjgmora/$IMAGE_NAME:capstone_image_green .
+            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+            docker push mjgmora/$IMAGE_NAME:capstone_image_green
   create-cluster:
     executor: aws-eks/python3
     parameters:
@@ -6,7 +58,6 @@ jobs:
         description: |
           Name of the EKS cluster
         type: string
-        
     steps:
       - run:
           name: Install the eksctl tool
@@ -40,15 +91,25 @@ jobs:
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
       - run:
+          name: Deploy blue app in cluster
           command: |
-            kubectl get services && sleep 300
-          name: Test cluster
+            cd blue
+            ./run_kubernetes.sh
       - run:
-          name: Deploy green docker image
           command: |
-            # Connect to the aws eks cluster and then deploy the replication and service in there??
+            kubectl get all && sleep 300
+            # curl the url ?? how to get the url?
+          name: Test blue app in cluster
+      - run:
+          name: Deploy green app in cluster
+          command: |
             cd green
             ./run_kubernetes.sh
+      - run:
+          command: |
+            kubectl get all && sleep 300
+            # curl the url ?? how to get the url?
+          name: Test green app in cluster
   delete-cluster:
     executor: aws-eks/python3
     parameters:
@@ -83,7 +144,7 @@ orbs:
   kubernetes: circleci/kubernetes@0.4.0
 version: 2.1
 workflows:
-  deployment:
+  capstone-workflow:
     jobs:
       - create-cluster:
           cluster-name: my-eks-demo
