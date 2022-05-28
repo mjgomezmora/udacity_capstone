@@ -9,14 +9,16 @@ def wrap_html(message):
             <div style='font-size:20px;'>
             <center>
                 {0}<br>
-            </center> x --lint error
+            </center> 
             </div>
         </body>
         </html>""".format(message)
     return html
 
 @app.route('/')
-def capstone_hello_world():
+def capstone_hello
+x --error
+_world():
     message = 'Hello Friends! My name is Maria Jose Gomez Mora presenting my Udacity Cloud DevOps Engineer Nanodegree - Capstone project!'
     html = wrap_html(message)
     return html
