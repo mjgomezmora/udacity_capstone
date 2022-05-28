@@ -1,7 +1,7 @@
 jobs:
   lint-docker:
     docker:
-      - image: cimg/node:16.0.0
+      - image: circleci/python:3.7.3-stretch
     working_directory: ~/repo
     steps:
       - checkout
