@@ -16,9 +16,7 @@ def wrap_html(message):
     return html
 
 @app.route('/')
-def capstone_hello
-x --error
-_world():
+def capstone_hello_world():
     message = 'Hello Friends! My name is Maria Jose Gomez Mora presenting my Udacity Cloud DevOps Engineer Nanodegree - Capstone project!'
     html = wrap_html(message)
     return html
