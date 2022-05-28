@@ -5,7 +5,7 @@ app = Flask(__name__)
 def wrap_html(message):
     html = """
         <html>
-        <body style="background: green;">
+        <body style="background-color:green;">
             <div style='font-size:20px;'>
             <center>
                 {0}<br>
