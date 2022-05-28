@@ -22,7 +22,7 @@
             "containers":[
                {
                   "name":"green",
-                  "image":"mjgmora/capstone_image_green",
+                  "image":"mjgmora/capstone:green",
                   "ports":[
                      {
                         "name":"http-server",

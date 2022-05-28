@@ -42,7 +42,7 @@ jobs:
       - run:
           name: Setup python virtual environment
           command: |
-            echo 'export IMAGE_NAME=capstone_image' >> $BASH_ENV 
+            echo 'export IMAGE_NAME=capstone' >> $BASH_ENV 
             virtualenv capostoneenv
             . capostoneenv/bin/activate
             pip install --no-cache-dir -r requirements.txt
@@ -53,17 +53,17 @@ jobs:
           command: |
             . capostoneenv/bin/activate
             cd blue
-            docker build -t mjgmora/$IMAGE_NAME:capstone_image_blue .
+            docker build -t mjgmora/$IMAGE_NAME:blue .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push mjgmora/$IMAGE_NAME:capstone_image_blue
+            docker push mjgmora/$IMAGE_NAME:blue
       - run:
           name: Build and push green Docker image
           command: |
             . capostoneenv/bin/activate
             cd green
-            docker build -t mjgmora/$IMAGE_NAME:capstone_image_green .
+            docker build -t mjgmora/$IMAGE_NAME:green .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push mjgmora/$IMAGE_NAME:capstone_image_green
+            docker push mjgmora/$IMAGE_NAME:green
   create-cluster:
     executor: aws-eks/python3
     parameters:
