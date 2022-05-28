@@ -5,11 +5,11 @@ app = Flask(__name__)
 def wrap_html(message):
     html = """
         <html>
-        <body style="background-color:blue;">
+        <body style="background:blue;">
             <div style='font-size:20px;'>
             <center>
                 {0}<br>
-            </center>
+            </center> x --lint error
             </div>
         </body>
         </html>""".format(message)

@@ -6,19 +6,30 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Lint Dockerfile for blue app
+          name: Setup python virtual environment
+          command: |
+            echo 'export IMAGE_NAME=capstone_image' >> $BASH_ENV 
+            virtualenv capostoneenv
+            . capostoneenv/bin/activate
+            pip install --no-cache-dir -r requirements.txt
+      - run:
+          name: Lint blue app
           command: |
             cd blue
             wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x ./hadolint
             ./hadolint Dockerfile
+            . capostoneenv/bin/activate
+            pylint --disable=R,C,W1203,W1202 capstone_hello_world.py
       - run:
-          name: Lint Dockerfile for green app
+          name: Lint green app
           command: |
             cd green
             wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x ./hadolint
             ./hadolint Dockerfile
+            . capostoneenv/bin/activate
+            pylint --disable=R,C,W1203,W1202 capstone_hello_world.py
   build-deploy-app:
     docker:
       - image: circleci/python:3.7.3-stretch
