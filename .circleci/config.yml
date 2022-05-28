@@ -64,6 +64,7 @@ jobs:
             docker build -t mjgmora/$IMAGE_NAME:green .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push mjgmora/$IMAGE_NAME:green
+            
   create-cluster:
     executor: aws-eks/python3
     parameters:
