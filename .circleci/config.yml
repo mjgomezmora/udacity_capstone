@@ -97,7 +97,7 @@ jobs:
             ./run_kubernetes.sh
       - run:
           command: |
-            sleep 300 && kubectl get all
+            sleep 120 && kubectl get all && sleep 120
           name: Test blue app in cluster
       - run:
           name: Deploy green app in cluster
@@ -106,7 +106,7 @@ jobs:
             ./run_kubernetes.sh
       - run:
           command: |
-            sleep 300 && kubectl get all
+            sleep 120 && kubectl get all && sleep 120
           name: Test green app in cluster
   delete-cluster:
     executor: aws-eks/python3

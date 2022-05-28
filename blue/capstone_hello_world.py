@@ -8,8 +8,6 @@ def wrap_html(message):
         <body style="background: blue;">
             <div style='font-size:20px;'>
             <center>
-                <image height="200" width="800" src="cloud.png">
-                <br>
                 {0}<br>
             </center>
             </div>
