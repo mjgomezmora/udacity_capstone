@@ -16,7 +16,7 @@ jobs:
           command: |
             virtualenv capostoneenv
             . capostoneenv/bin/activate
-            python test_hello_world.py            
+            python test_capstone_hello_world.py            
   build-deploy-app:
     docker:
       - image: circleci/python:3.7.3-stretch
