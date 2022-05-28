@@ -6,30 +6,14 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Lint Dockerfile for blue app
+          name: Lint Dockerfile for app
           command: |
-            cd blue
             wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x ./hadolint
             ./hadolint Dockerfile
       - run:
-          name: Lint Dockerfile for green app
+          name: Run app test
           command: |
-            cd green
-            wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
-            chmod +x ./hadolint
-            ./hadolint Dockerfile
-      - run:
-          name: Run blue app tests
-          command: |
-            cd blue
-            virtualenv capostoneenv
-            . capostoneenv/bin/activate
-            python test_hello_world.py            
-      - run:
-          name: Run green app tests
-          command: |
-            cd green
             virtualenv capostoneenv
             . capostoneenv/bin/activate
             python test_hello_world.py            
