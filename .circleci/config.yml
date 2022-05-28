@@ -146,8 +146,14 @@ version: 2.1
 workflows:
   capstone-workflow:
     jobs:
+      - lint-docker
+      - build-deploy-app:
+          requires: 
+            - lint-docker    
       - create-cluster:
           cluster-name: my-eks-demo
+          requires: 
+            - build-deploy-app          
       - test-cluster:
           cluster-name: my-eks-demo
           requires:
