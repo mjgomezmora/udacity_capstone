@@ -23,13 +23,15 @@ jobs:
           name: Run blue app tests
           command: |
             cd blue
-            . helloworld/bin/activate
+            virtualenv capostoneenv
+            . capostoneenv/bin/activate
             python test_hello_world.py            
       - run:
           name: Run green app tests
           command: |
             cd green
-            . helloworld/bin/activate
+            virtualenv capostoneenv
+            . capostoneenv/bin/activate
             python test_hello_world.py            
   build-deploy-app:
     docker:
