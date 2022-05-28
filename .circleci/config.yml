@@ -8,16 +8,16 @@ jobs:
       - run:
           name: Lint Dockerfile for blue app
           command: |
+            cd blue
             wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x ./hadolint
-            cd blue
             ./hadolint Dockerfile
       - run:
           name: Lint Dockerfile for green app
           command: |
+            cd green
             wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x ./hadolint
-            cd green
             ./hadolint Dockerfile
   build-deploy-app:
     docker:
