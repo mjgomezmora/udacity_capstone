@@ -17,20 +17,20 @@ jobs:
       - run:
           name: Lint blue app
           command: |
+            . capostoneenv/bin/activate
             cd blue
             wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x ./hadolint
             ./hadolint Dockerfile
-            . capostoneenv/bin/activate
             pylint --disable=R,C,W1203,W1202 capstone_hello_world.py
       - run:
           name: Lint green app
           command: |
+            . capostoneenv/bin/activate
             cd green
             wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x ./hadolint
             ./hadolint Dockerfile
-            . capostoneenv/bin/activate
             pylint --disable=R,C,W1203,W1202 capstone_hello_world.py
   build-deploy-app:
     docker:
